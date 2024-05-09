@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { decode, sign, verify } from "hono/jwt";
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
+import { createBlogInput, updateBlogInput } from "@advjr/medium-package";
 
 /**
  * *Bindings is an object that has DATABASE_URL, it basically defines shape of object that Hono will expect to work with.
@@ -43,6 +44,12 @@ blogRouter.post("/", async (c) => {
   }).$extends(withAccelerate());
 
   const body = await c.req.json();
+  const { success } = createBlogInput.safeParse(body);
+
+  if (!success) {
+    c.status(411);
+    return c.json({ error: "Inputs are not correct!" });
+  }
   const authorId = c.get("userId");
   const blog = await prisma.blog.create({
     data: {
@@ -60,7 +67,12 @@ blogRouter.put("/", async (c) => {
   }).$extends(withAccelerate());
 
   const body = await c.req.json();
+  const { success } = updateBlogInput.safeParse(body);
 
+  if (!success) {
+    c.status(411);
+    return c.json({ error: "Inputs are not correct!" });
+  }
   const blog = await prisma.blog.update({
     where: {
       id: body.id,

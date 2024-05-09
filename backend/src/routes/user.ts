@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { sign } from "hono/jwt";
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
+import { signupInput } from "@advjr/medium-package";
 
 /**
  * *Bindings is an object that has DATABASE_URL, it basically defines shape of object that Hono will expect to work with.
@@ -20,6 +21,12 @@ userRouter.post("/signup", async (c) => {
   }).$extends(withAccelerate());
 
   const body = await c.req.json();
+  const { success } = signupInput.safeParse(body);
+
+  if (!success) {
+    c.status(411);
+    return c.json({ error: "Credentials are not correct!" });
+  }
 
   try {
     const user = await prisma.user.create({

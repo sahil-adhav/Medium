@@ -18,19 +18,22 @@ export const blogRouter = new Hono<{
 
 // Middlewear
 blogRouter.use("/*", async (c, next) => {
-  const token = c.req.header("Authorization");
-  const jwt = token?.split(" ")[1] || "";
-  const user = await verify(jwt, c.env.JWT_TOKEN);
+  const jwt = c.req.header("Authorization") || "";
 
-  if (user) {
-    c.set("userId", user.id);
-    next();
-  } else {
+  try {
+    const user = await verify(jwt, c.env.JWT_TOKEN);
+
+    if (user) {
+      c.set("userId", user.id);
+      await next();
+    } else {
+      c.status(403);
+      return c.json({ error: "Please log in to view blogs!" });
+    }
+  } catch (e) {
     c.status(403);
     return c.json({ error: "Please log in to view blogs!" });
   }
-
-  await next();
 });
 
 // Blog
@@ -70,27 +73,6 @@ blogRouter.put("/", async (c) => {
   return c.json({ content: blog });
 });
 
-// Get Blog Article
-blogRouter.get("/", async (c) => {
-  const prisma = new PrismaClient({
-    datasourceUrl: c.env?.DATABASE_URL,
-  }).$extends(withAccelerate());
-
-  try {
-    const body = await c.req.json();
-
-    const blog = await prisma.blog.findFirst({
-      where: {
-        id: body.id,
-      },
-    });
-    return c.json({ content: blog });
-  } catch (e) {
-    c.status(404);
-    return c.json({ error: "No such blog exists with this id!" });
-  }
-});
-
 // Blog bulk
 /**
  * !TODO: Add Pagination here
@@ -102,4 +84,25 @@ blogRouter.get("/bulk", async (c) => {
 
   const blogs = await prisma.blog.findMany();
   return c.json({ blogs });
+});
+
+// Get Blog Article
+blogRouter.get("/:id", async (c) => {
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env?.DATABASE_URL,
+  }).$extends(withAccelerate());
+
+  try {
+    const blogId = c.req.param("id");
+
+    const blog = await prisma.blog.findFirst({
+      where: {
+        id: blogId,
+      },
+    });
+    return c.json({ content: blog });
+  } catch (e) {
+    c.status(404);
+    return c.json({ error: "No such blog exists with this id!" });
+  }
 });

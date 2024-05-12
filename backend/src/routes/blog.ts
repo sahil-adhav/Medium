@@ -94,7 +94,18 @@ blogRouter.get("/bulk", async (c) => {
     datasourceUrl: c.env?.DATABASE_URL,
   }).$extends(withAccelerate());
 
-  const blogs = await prisma.blog.findMany();
+  const blogs = await prisma.blog.findMany({
+    select: {
+      content: true,
+      title: true,
+      id: true,
+      author: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
   return c.json({ blogs });
 });
 
@@ -111,8 +122,18 @@ blogRouter.get("/:id", async (c) => {
       where: {
         id: blogId,
       },
+      select: {
+        content: true,
+        title: true,
+        id: true,
+        author: {
+          select: {
+            name: true,
+          },
+        },
+      },
     });
-    return c.json({ content: blog });
+    return c.json({ blog });
   } catch (e) {
     c.status(404);
     return c.json({ error: "No such blog exists with this id!" });

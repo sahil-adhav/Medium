@@ -4,6 +4,7 @@ import { useBlog, useBlogs } from "../hooks/useBlogs";
 import { BlogType } from "../hooks/useBlogs";
 import { Avatar } from "../components/Blogcard";
 import { BlogSkeleton } from "../components/BlogSkeleton";
+import ReactHtmlParser from "react-html-parser";
 
 export const Blog = () => {
   const { id } = useParams<{ id: string }>();
@@ -54,7 +55,9 @@ const BlogContent = ({ blog }: { blog: BlogType; blogs: BlogType[] }) => {
             </div>
           </div>
         </div>
-        <div className="pt-10 font-sans text-xl">{blog.content}</div>
+        <div className="pt-10 font-sans text-xl">
+          {ReactHtmlParser(blog.content)}
+        </div>
       </div>
       <div className="col-span-4 justify-center flex items-center">
         Blogs by the author

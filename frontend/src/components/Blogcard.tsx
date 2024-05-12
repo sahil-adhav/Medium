@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import ReactHtmlParser from "react-html-parser";
 
 interface BlogCardProps {
   id: string;
@@ -15,6 +16,8 @@ export const BlogCard = ({
   content,
   publishedDate,
 }: BlogCardProps) => {
+  const finalCotent =
+    content.length > 150 ? content.slice(0, 150) + "..." : content;
   return (
     <Link to={`/blog/${id}`}>
       <div className="flex border-b pb-5 border-slate-200 w-screen max-w-screen-md cursor-pointer">
@@ -28,7 +31,7 @@ export const BlogCard = ({
               </div>
               <div className="font-extrabold text-3xl mt-4">{title}</div>
               <div className="text-slate-700">
-                {content.length > 150 ? content.slice(0, 150) + "..." : content}
+                {ReactHtmlParser(finalCotent)}
               </div>
               <div className="text-slate-500 text-xs mt-5 italic">{`${Math.ceil(
                 content.length / 100

@@ -9,6 +9,7 @@ export interface BlogType {
   author: {
     name: string;
   };
+  posts: { id: string; title: string; content: string }[];
 }
 
 export const useBlogs = () => {
@@ -49,4 +50,24 @@ export const useBlog = ({ id }: { id: string }) => {
   }, [id]);
 
   return { loading, blog };
+};
+
+export const useUserBlogs = () => {
+  const [loading, setLoading] = useState(true);
+  const [blogs, setBlogs] = useState<BlogType[]>([]);
+
+  useEffect(() => {
+    axios
+      .get(`${BACKEND_URL}/api/v1/profile`, {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      })
+      .then((response) => {
+        setBlogs(response.data.blogs);
+        setLoading(false);
+      });
+  }, []);
+
+  return { loading, blogs };
 };

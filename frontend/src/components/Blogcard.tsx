@@ -3,7 +3,8 @@ import ReactHtmlParser from "react-html-parser";
 
 interface BlogCardProps {
   id: string;
-  authorName: string;
+  isUser?: boolean;
+  authorName?: string;
   title: string;
   content: string;
   publishedDate: string;
@@ -14,6 +15,7 @@ export const BlogCard = ({
   authorName,
   title,
   content,
+  isUser,
   publishedDate,
 }: BlogCardProps) => {
   const finalCotent =
@@ -24,11 +26,13 @@ export const BlogCard = ({
         <div className="flex-1 p-4">
           <div>
             <div>
-              <div className="text-slate-600 flex space-x-2">
-                <Avatar height="h-7" width="w-7" />
-                <span className="">{authorName}</span> <span>·</span>
-                <span className="text-slate-500 ">{publishedDate}</span>
-              </div>
+              {!isUser && (
+                <div className="text-slate-600 flex space-x-2">
+                  <Avatar height="h-7" width="w-7" />
+                  <span className="">{authorName}</span> <span>·</span>
+                  <span className="text-slate-500 ">{publishedDate}</span>
+                </div>
+              )}
               <div className="font-extrabold text-3xl mt-4">{title}</div>
               <div className="text-slate-700">
                 {ReactHtmlParser(finalCotent)}

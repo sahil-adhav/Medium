@@ -34,7 +34,9 @@ export const Appbar = ({ fn }: AppbarProps) => {
           </button>
         </Link>
 
-        <Avatar height="h-10" width="w-10" />
+        <Link to={"/profile"}>
+          <Avatar height="h-10" width="w-10" />
+        </Link>
       </div>
     </div>
   );

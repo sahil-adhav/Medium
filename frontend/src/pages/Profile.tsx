@@ -18,7 +18,7 @@ export const Profile = () => {
         <Appbar />
       </div>
       <div className="grid w-full lg:grid-cols-12 p-10">
-        <div className="col-span-8 pl-20">
+        <div className="col-span-8 pl-20 flex flex-col items-center justify-center">
           {blogs.posts.map(
             (post: { id: string; title: string; content: string }) => (
               <BlogCard

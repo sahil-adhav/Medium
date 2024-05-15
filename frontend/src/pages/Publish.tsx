@@ -30,42 +30,26 @@ export const Publish = () => {
   return (
     <div>
       <div>
-        <Appbar />
+        <Appbar fn={sendPostReq} />
       </div>
       <div>
         <div className="max-w-3xl mx-auto">
           <div className="mb-5">
             <div className="">
-              <input
-                type="textarea"
+              <textarea
                 id="large-input"
-                className="block break-all w-full  pt-4 text-gray-900  rounded-lg text-5xl focus-visible:outline-none font-serif"
+                className="block w-full mt-200 pt-4 text-gray-900  rounded-lg text-5xl focus-visible:outline-none font-serif resize-none overflow-hidden"
                 placeholder="Title"
                 onChange={(e) => {
                   setTitle(e.target.value);
                 }}
               />
             </div>
-            {/* <textarea
-              className=" text-gray-900 text-xl rounded-lg focus-visible:outline-none focus:border-gray-300 block w-full pt-5 placeholder-gray-400 font-serif"
-              placeholder="Write your story..."
-              rows={20}
-              onChange={(e) => {
-                setContent(e.target.value);
-              }}
-            /> */}
             <JoditEditor
               ref={editor}
               value={content}
               onChange={(newContent) => setContent(newContent)}
             />
-            <button
-              type="button"
-              className="text-white bg-green-700  focus:outline-none font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2  mr-4"
-              onClick={sendPostReq}
-            >
-              Publish
-            </button>
           </div>
         </div>
       </div>

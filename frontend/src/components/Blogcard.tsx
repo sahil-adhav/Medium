@@ -34,7 +34,7 @@ export const BlogCard = ({
                 {ReactHtmlParser(finalCotent)}
               </div>
               <div className="text-slate-500 text-xs mt-5 italic">{`${Math.ceil(
-                content.length / 100
+                content.length / 300
               )} min read`}</div>
             </div>
           </div>

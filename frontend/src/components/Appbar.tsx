@@ -4,8 +4,13 @@ import { Avatar } from "./Blogcard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 
-export const Appbar = () => {
+interface AppbarProps {
+  fn?: () => void;
+}
+
+export const Appbar = ({ fn }: AppbarProps) => {
   const url = window.location.href;
+
   const onPublishPage = R.includes("publish", url);
   return (
     <div className="border-b flex justify-between px-10 py-4">
@@ -16,6 +21,7 @@ export const Appbar = () => {
         <Link to={"/publish"}>
           <button
             type="button"
+            onClick={onPublishPage ? fn : undefined}
             className="text-white bg-green-700  focus:outline-none font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2  mr-4"
           >
             {onPublishPage ? (

@@ -44,6 +44,8 @@ profileRouter.get("/", async (c) => {
       id: user.id,
     },
     select: {
+      id: true,
+      username: true,
       posts: {
         select: {
           id: true,

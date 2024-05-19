@@ -2,7 +2,13 @@ import z from "zod";
 
 // Signup
 export const signupInput = z.object({
-  username: z.string().min(4),
+  username: z
+    .string()
+    .min(4)
+    .refine((username) => !/\s/.test(username), {
+      message: "Username cannot contain spaces",
+      path: ["username"],
+    }),
   password: z.string().min(6),
   name: z.string().min(2),
 });
@@ -17,13 +23,13 @@ export const signinInput = z.object({
 // Blog
 
 export const createBlogInput = z.object({
-  title: z.string(),
-  content: z.string(),
+  title: z.string().min(3),
+  content: z.string().min(5),
 });
 
 export const updateBlogInput = z.object({
-  title: z.string(),
-  content: z.string(),
+  title: z.string().min(3),
+  content: z.string().min(5),
   id: z.string(),
 });
 

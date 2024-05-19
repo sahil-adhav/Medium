@@ -1,17 +1,31 @@
 import { useParams } from "react-router-dom";
 import { Appbar } from "../components/Appbar";
-import { useBlog, useBlogs } from "../hooks/useBlogs";
-import { BlogType } from "../hooks/useBlogs";
+import { useBlog } from "../hooks/useBlog";
 import { Avatar } from "../components/Blogcard";
 import { BlogSkeleton } from "../components/BlogSkeleton";
 import ReactHtmlParser from "react-html-parser";
+import { SignInToView } from "./SignInView";
+import { BlogType } from "../interface";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHandsClapping } from "@fortawesome/free-solid-svg-icons";
+import { getFormattedDate, getTimeRequireToReadBlog } from "../utils";
+import { useLikeBlog } from "../hooks/usLikeBlog";
 
 export const Blog = () => {
   const { id } = useParams<{ id: string }>();
-  const { loading, blog } = useBlog({ id: id || "" });
-  const { blogs } = useBlogs();
+  const { isLoading, data: blog, error } = useBlog({ id: id || "" });
 
-  if (loading) {
+  console.log("blog : ", blog);
+
+  if (error) {
+    return (
+      <>
+        <SignInToView />
+      </>
+    );
+  }
+
+  if (isLoading) {
     return (
       <div>
         <div>
@@ -30,15 +44,18 @@ export const Blog = () => {
       <div>
         <Appbar />
       </div>
-      <div>{blog && <BlogContent blog={blog} blogs={blogs} />}</div>
+      <div>{blog && <BlogContent blog={blog} />}</div>
     </div>
   );
 };
 
-const BlogContent = ({ blog }: { blog: BlogType; blogs: BlogType[] }) => {
+const BlogContent = ({ blog }: { blog: BlogType }) => {
+  const date = getFormattedDate(blog.publishedDate);
+  const minRead = getTimeRequireToReadBlog(blog.content);
+  const { isLiked, handleLike, likes } = useLikeBlog(blog);
   return (
-    <div className="grid grid-cols-12 w-full px-10 pt-300">
-      <div className="col-span-8">
+    <div className="flex justify-center w-full px-20 pt-300">
+      <div className="max-w-screen-lg align-center">
         <div className="text-5xl font-extrabold pt-12">{blog.title}</div>
         <div className="pt-5 flex border-b border-slate-300 pb-5">
           <div>
@@ -47,20 +64,29 @@ const BlogContent = ({ blog }: { blog: BlogType; blogs: BlogType[] }) => {
           <div className="pl-2  font-light">
             <div className="text-md">{blog.author.name}</div>
             <div className="text-sm">
-              <span className="font-light pr-2">{`${Math.ceil(
-                blog.content.length / 100
-              )} min read`}</span>
+              <span className="font-light pr-2">{`${minRead} min read`}</span>
               <span>·</span>
-              <span className="pl-2">16 Nov 2023</span>
+              <span className="pl-2">{date}</span>
             </div>
+          </div>
+        </div>
+        <div className="border-b">
+          <div
+            className="text-slate-500 py-5 flex items-center"
+            onClick={handleLike}
+          >
+            <div className="text-2xl">
+              <FontAwesomeIcon
+                icon={faHandsClapping}
+                className={`${!isLiked ? "text-slate-300" : "text-slate-900"}`}
+              />
+            </div>
+            <div className="text-md pl-2">{likes}</div>
           </div>
         </div>
         <div className="pt-10 font-sans text-xl">
           {ReactHtmlParser(blog.content)}
         </div>
-      </div>
-      <div className="col-span-4 justify-center flex items-center">
-        Blogs by the author
       </div>
     </div>
   );

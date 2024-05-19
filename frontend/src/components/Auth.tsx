@@ -1,10 +1,11 @@
 import axios from "axios";
 import { SignupInput } from "@advjr/medium-package";
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BACKEND_URL } from "../config";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { InputType } from "../interface";
 
 export const Auth = ({ type }: { type: "signup" | "signin" }) => {
   const navigate = useNavigate();
@@ -67,16 +68,26 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
               }}
             />
             {type === "signup" ? (
-              <InputBox
-                label="Email"
-                placeholder="abc@example.com"
-                onChange={(e) => {
-                  setBlogInputs({
-                    ...blogInputs,
-                    name: e.target.value,
-                  });
-                }}
-              />
+              <>
+                <InputBox
+                  label="Email"
+                  placeholder="abc@example.com"
+                  onChange={(e) => {
+                    setBlogInputs({
+                      ...blogInputs,
+                      name: e.target.value,
+                    });
+                  }}
+                />
+                <label className="block mt-2 mb-1 text-gray-700 text-lg font-medium">
+                  Upload Profile Image
+                </label>
+                <input
+                  className="block w-full text-lg font-serif p-1 text-gray-900 border rounded-lg cursor-pointer focus:outline-none"
+                  id="large_size"
+                  type="file"
+                ></input>
+              </>
             ) : null}
             <InputBox
               label="Password"
@@ -102,13 +113,6 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
     </div>
   );
 };
-
-interface InputType {
-  label: string;
-  placeholder: string;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  type?: string;
-}
 
 const InputBox = ({ label, placeholder, onChange, type }: InputType) => {
   return (

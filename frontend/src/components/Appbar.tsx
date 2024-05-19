@@ -48,15 +48,13 @@ export const Appbar = ({ fn }: AppbarProps) => {
             )}
           </Link>
         ) : (
-          <Link to={"/blogs"}>
-            <button
-              type="button"
-              onClick={onEditPage ? fn : undefined}
-              className="text-white bg-green-700 focus:outline-none font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2  mr-4"
-            >
-              Re-Publish
-            </button>
-          </Link>
+          <button
+            type="button"
+            onClick={onEditPage ? fn : undefined}
+            className="text-white bg-green-700 focus:outline-none font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2  mr-4"
+          >
+            Re-Publish
+          </button>
         )}
         {/* Avatar dropdown */}
         {isLoggedIn && (

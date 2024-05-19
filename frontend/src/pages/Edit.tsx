@@ -28,15 +28,15 @@ export const EditBlog = () => {
         console.error("Error fetching blog:", error);
       }
     };
-
     fetchBlog();
   }, [blog]);
 
-  const sendPostReq = async () => {
+  const sendPutReq = async () => {
     try {
       await axios.put(
         `${BACKEND_URL}/api/v1/blog/${id}`,
         {
+          id,
           title,
           topic,
           content,
@@ -76,7 +76,7 @@ export const EditBlog = () => {
   return (
     <div>
       <div>
-        <Appbar fn={sendPostReq} />
+        <Appbar fn={sendPutReq} />
       </div>
       <div>
         <div className="max-w-3xl mx-auto">

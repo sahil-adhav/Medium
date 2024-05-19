@@ -1,8 +1,10 @@
 import * as R from "ramda";
 import { UserType } from "./interface";
 
-export const getUserName = (userBlogs: UserType[]) => {
-  return R.path(["posts", 0, "author", "username"], userBlogs) as string;
+export const getUser = (userBlogs: UserType) => {
+  const username = R.prop("username", userBlogs);
+  const userId = R.prop("id", userBlogs);
+  return { username, userId };
 };
 
 export const getFormattedDate = (publishedDate: Date) => {

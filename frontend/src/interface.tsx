@@ -51,6 +51,22 @@ export interface BlogType {
 
 export interface UserType {
   id: string;
+  username: string;
+  posts: PostType[];
+}
+
+export interface PostType {
+  id: string;
+  title: string;
+  topic: string;
+  content: string;
+  author: {
+    username: string;
+  };
+}
+
+export interface UserType {
+  id: string;
   title: string;
   content: string;
   topic: string;

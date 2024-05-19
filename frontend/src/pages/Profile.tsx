@@ -3,12 +3,13 @@ import { Avatar, BlogCard } from "../components/Blogcard";
 import { useUserBlogs } from "../hooks/useUserBlogs";
 import { SignInToView } from "./SignInView";
 import { useAuth } from "../hooks/useAuth";
-import { getUserName } from "../utils";
+import { getUser } from "../utils";
 import { UserType } from "../interface";
 
 export const Profile = () => {
   const { isLoading, data: userBlogs, refetch } = useUserBlogs();
   const isLoggedIn = useAuth();
+  const { username } = getUser(userBlogs);
 
   if (!isLoggedIn) {
     return (
@@ -21,8 +22,6 @@ export const Profile = () => {
   if (isLoading) {
     return <h1>Loading...</h1>;
   }
-
-  const username = getUserName(userBlogs);
 
   return (
     <div>

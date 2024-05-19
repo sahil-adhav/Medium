@@ -7,15 +7,13 @@ import ReactHtmlParser from "react-html-parser";
 import { SignInToView } from "./SignInView";
 import { BlogType } from "../interface";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHandsClapping } from "@fortawesome/free-solid-svg-icons";
+import { faHandsClapping, faComment } from "@fortawesome/free-solid-svg-icons";
 import { getFormattedDate, getTimeRequireToReadBlog } from "../utils";
 import { useLikeBlog } from "../hooks/usLikeBlog";
 
 export const Blog = () => {
   const { id } = useParams<{ id: string }>();
   const { isLoading, data: blog, error } = useBlog({ id: id || "" });
-
-  console.log("blog : ", blog);
 
   if (error) {
     return (
@@ -70,7 +68,7 @@ const BlogContent = ({ blog }: { blog: BlogType }) => {
             </div>
           </div>
         </div>
-        <div className="border-b">
+        <div className="border-b flex">
           <div
             className="text-slate-500 py-5 flex items-center"
             onClick={handleLike}
@@ -80,6 +78,15 @@ const BlogContent = ({ blog }: { blog: BlogType }) => {
                 icon={faHandsClapping}
                 className={`${!isLiked ? "text-slate-300" : "text-slate-900"}`}
               />
+            </div>
+            <div className="text-md pl-2">{likes}</div>
+          </div>
+          <div
+            className="text-slate-500 py-5 pl-10 flex items-center"
+            onClick={handleLike}
+          >
+            <div className="text-2xl">
+              <FontAwesomeIcon icon={faComment} className="text-slate-300" />
             </div>
             <div className="text-md pl-2">{likes}</div>
           </div>

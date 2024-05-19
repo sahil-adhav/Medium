@@ -48,6 +48,7 @@ profileRouter.get("/", async (c) => {
         select: {
           id: true,
           title: true,
+          topic: true,
           content: true,
           author: {
             select: {
@@ -56,6 +57,24 @@ profileRouter.get("/", async (c) => {
           },
         },
       },
+    },
+  });
+
+  return c.json({ blogs });
+});
+
+profileRouter.delete("/", async (c) => {
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env?.DATABASE_URL,
+  }).$extends(withAccelerate());
+
+  const jwt = c.req.header("Authorization") || "";
+  const user = await verify(jwt, c.env.JWT_TOKEN);
+  const body = await c.req.json();
+
+  const blogs = await prisma.blog.delete({
+    where: {
+      id: body.id,
     },
   });
 

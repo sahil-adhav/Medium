@@ -22,4 +22,26 @@ app.route("/api/v1/user", userRouter);
 app.route("/api/v1/blog", blogRouter);
 app.route("/api/v1/profile", profileRouter);
 
+app.get("/", async (c) => {
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env?.DATABASE_URL,
+  }).$extends(withAccelerate());
+
+  const blogs = await prisma.blog.findMany({
+    select: {
+      content: true,
+      title: true,
+      topic: true,
+      id: true,
+      publishedDate: true,
+      author: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
+  return c.json({ blogs });
+});
+
 export default app;

@@ -17,6 +17,34 @@ export const blogRouter = new Hono<{
   };
 }>();
 
+// Blog bulk
+/**
+ * !TODO: Add Pagination here
+ */
+blogRouter.get("/bulk", async (c) => {
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env?.DATABASE_URL,
+  }).$extends(withAccelerate());
+
+  const blogs = await prisma.blog.findMany({
+    select: {
+      content: true,
+      title: true,
+      topic: true,
+      id: true,
+      likes: true,
+      publishedDate: true,
+      author: {
+        select: {
+          name: true,
+          username: true,
+        },
+      },
+    },
+  });
+  return c.json({ blogs });
+});
+
 // Middlewear
 blogRouter.use("/*", async (c, next) => {
   const jwt = c.req.header("Authorization") || "";
@@ -54,14 +82,16 @@ blogRouter.post("/", async (c) => {
   const blog = await prisma.blog.create({
     data: {
       title: body.title,
+      topic: body.topic,
       content: body.content,
       authorId: authorId,
+      publishedDate: body.date,
     },
   });
   return c.json({ id: blog.id });
 });
 
-blogRouter.put("/", async (c) => {
+blogRouter.put("/:id", async (c) => {
   const prisma = new PrismaClient({
     datasourceUrl: c.env?.DATABASE_URL,
   }).$extends(withAccelerate());
@@ -79,34 +109,12 @@ blogRouter.put("/", async (c) => {
     },
     data: {
       title: body.title,
+      topic: body.topic,
+      likes: body.likes,
       content: body.content,
     },
   });
   return c.json({ content: blog });
-});
-
-// Blog bulk
-/**
- * !TODO: Add Pagination here
- */
-blogRouter.get("/bulk", async (c) => {
-  const prisma = new PrismaClient({
-    datasourceUrl: c.env?.DATABASE_URL,
-  }).$extends(withAccelerate());
-
-  const blogs = await prisma.blog.findMany({
-    select: {
-      content: true,
-      title: true,
-      id: true,
-      author: {
-        select: {
-          name: true,
-        },
-      },
-    },
-  });
-  return c.json({ blogs });
 });
 
 // Get Blog Article
@@ -125,10 +133,14 @@ blogRouter.get("/:id", async (c) => {
       select: {
         content: true,
         title: true,
+        topic: true,
         id: true,
+        publishedDate: true,
+        likes: true,
         author: {
           select: {
             name: true,
+            username: true,
           },
         },
       },

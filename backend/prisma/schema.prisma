@@ -24,8 +24,13 @@ model User {
 model Blog {
   id        String  @id @default(uuid())
   title     String
+  topic     String @default("")
   content   String
   published Boolean @default(false)
+  likes     String[]
   author    User    @relation(fields: [authorId], references: [id])
   authorId  String
+  publishedDate DateTime @default(now()) @db.Date
 }
+
+

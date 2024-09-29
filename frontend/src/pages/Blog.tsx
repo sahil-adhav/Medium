@@ -7,7 +7,7 @@ import ReactHtmlParser from "react-html-parser";
 import { SignInToView } from "./SignInView";
 import { BlogType } from "../interface";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHandsClapping, faComment } from "@fortawesome/free-solid-svg-icons";
+import { faHandsClapping } from "@fortawesome/free-solid-svg-icons"; // faComment
 import { getFormattedDate, getTimeRequireToReadBlog } from "../utils";
 import { useLikeBlog } from "../hooks/usLikeBlog";
 
@@ -85,10 +85,10 @@ const BlogContent = ({ blog }: { blog: BlogType }) => {
             className="text-slate-500 py-5 pl-10 flex items-center"
             onClick={handleLike}
           >
-            <div className="text-2xl">
+            {/* <div className="text-2xl">
               <FontAwesomeIcon icon={faComment} className="text-slate-300" />
             </div>
-            <div className="text-md pl-2">{likes}</div>
+            <div className="text-md pl-2">{likes}</div> */}
           </div>
         </div>
         <div className="pt-10 font-sans text-xl">

@@ -108,12 +108,12 @@ export const Avatar = ({
   return (
     <img
       className={`${height} ${width} rounded-full mr-2`}
-      src="https://shorturl.at/imnU2"
-      alt="Rounded avatar"
+      src="https://tinyurl.com/yun6r3tk"
+      alt="R"
     ></img>
   );
 };
 
 const PreviewImg = () => {
-  return <img src="https://shorturl.at/imnU2" />;
+  return <img src="https://tinyurl.com/yun6r3tk" />;
 };
